@@ -19,7 +19,12 @@ function WGCElectricity:DoDec(dt, ignore_damage)
    end
 
    if self.current > 0 then
-      self:DoDelta(-0.1, true)
+      -- if user is running, decay faster
+      if self.inst.HasTag(self.inst, "running") then
+         self:DoDelta(-0.15, true)
+      else
+         self:DoDelta(-0.05, true)
+      end
    end
 end
 

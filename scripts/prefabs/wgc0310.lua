@@ -112,6 +112,7 @@ local function WGC0310_OnEat(inst, food)
             inst.SoundEmitter:PlaySound("dontstarve/characters/wx78/levelup")
 
             -- and if this is the original gear (not WGC-0310 made), recover full electricity
+            -- also the original code recovering hunger should just work here
             if food.name == "gears" then
                 inst.components.wgc_electricity.current = inst.components.wgc_electricity.max
                 inst.components.wgc_electricity:ForceUpdate()
@@ -138,7 +139,7 @@ end
 
 local function WGC0310_WorkConsumesElectricity(inst, data)
     if inst.components.wgc_electricity ~= nil then
-        inst.components.wgc_electricity:DoDelta(-2, true)
+        inst.components.wgc_electricity:DoDelta(-3, true)
     end
 end
 
@@ -153,7 +154,7 @@ local function WGC0310_HungerBurn(inst)
         then
             -- if the electricity is not full, burn hunger to charge it
             inst.components.hunger:DoDelta(-1, true)
-            inst.components.wgc_electricity:DoDelta(10, true)
+            inst.components.wgc_electricity:DoDelta(7.5, true)
         end
     end
 end
