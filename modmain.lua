@@ -76,13 +76,13 @@ AddClassPostConstruct("widgets/statusdisplays", function (self, owner)
       self.brain:Hide()
    end
 
-   self.wgc_electricity = self:AddChild(WGCElectricityBadge(owner))
+   self.wgc_electricity_badge = self:AddChild(WGCElectricityBadge(owner))
    -- use the position of original sanity badge
-   self.wgc_electricity:SetPosition(self.column3, -40, 0)
+   self.wgc_electricity_badge:SetPosition(self.column3, -40, 0)
 
    -- listen to electricity delta event
    owner:ListenForEvent("wgc_electricity_delta", function (inst, data)
-      print("EVENT wgc_electricity_delta, data.current = ", data.current)
-      self.wgc_electricity:SetPercent(data.current / 100)
+      self.wgc_electricity_badge:SetPercent(data.newpercent)
+      self.wgc_electricity_badge.num:SetString(math.floor(data.current))
    end)
 end)

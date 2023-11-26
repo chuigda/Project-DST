@@ -14,6 +14,8 @@ TUNING.WGC0310_HUNGER = 200
 TUNING.WGC0310_SANITY = 200
 TUNING.WGC0310_ABSORPTION_MODIFIER = 0.75
 TUNING.WGC0310_ACCELERATION = 1.1
+TUNING.WGC0310_ATTACK_MODIFIER = 2
+TUNING.WGC0310_WORKEFFECTIVENESS_MODIFIER = 1.5
 
 TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WGC0310 = {}
 local start_inv = {}
@@ -22,11 +24,87 @@ for k, v in pairs(TUNING.GAMEMODE_STARTING_ITEMS) do
 end
 local prefabs = FlattenTree(start_inv, true)
 
+local function WGC0310_OnBecomePlayerCharacter(inst)
+    inst.components.hunger:SetPercent(0.5)
+
+    inst.components.wgc_electricity.current = 750
+    inst.components.wgc_electricity:ForceUpdate()
+end
+
+local function WGC0310_OnBecomeGhost(inst)
+    inst.components.wgc_electricity.current = 750
+    inst.components.wgc_electricity:ForceUpdate()
+end
+
+local function WGC0310_OnSave(inst, data)
+    if inst.components.wgc_electricity ~= nil then
+        data.wgc_electricity = inst.components.wgc_electricity.current
+    end
+end
+
+local function WGC0310_OnLoad(inst, data)
+    inst:ListenForEvent("ms_respawnedfromghost", WGC0310_OnBecomePlayerCharacter)
+    inst:ListenForEvent("ms_becameghost", WGC0310_OnBecomeGhost)
+
+    if data ~= nil and data.wgc_electricity ~= nil and inst.components.wgc_electricity ~= nil then
+        inst.components.wgc_electricity.current = data.wgc_electricity
+        inst.components.wgc_electricity:ForceUpdate()
+    end
+end
+
+TUNING.WGC0310_STUNNED_ACCERATION = 0.1
+TUNING.WGC0310_STUNNED_ATTACK_MODIFIER = 0.1
+TUNING.WGC0310_STUNNED_WORKEFFECTIVENESS_MODIFIER = 0.1
+
+local function WGC0310_OnElectricityBecomeEmpty(inst)
+    -- when the electricity is empty, the character will be almost stunned, no working and fighting allowed,
+    -- and move very slow
+
+    if inst.components.locomotor ~= nil then
+        inst.components.locomotor:SetExternalSpeedMultiplier(inst, "WGC0310_Acceleration", TUNING.WGC0310_STUNNED_ACCERATION)
+    end
+
+    if inst.components.combat ~= nil then
+        inst.components.combat.damagemultiplier = TUNING.WGC0310_STUNNED_ATTACK_MODIFIER
+    end
+
+    if inst.components.workmultiplier ~= nil then
+        inst.components.workmultiplier:RemoveMultiplier(ACTIONS.CHOP, inst)
+        inst.components.workmultiplier:RemoveMultiplier(ACTIONS.MINE, inst)
+        inst.components.workmultiplier:RemoveMultiplier(ACTIONS.HAMMER, inst)
+
+        inst.components.workmultiplier:AddMultiplier(ACTIONS.CHOP, TUNING.WGC0310_STUNNED_WORKEFFECTIVENESS_MODIFIER, inst)
+        inst.components.workmultiplier:AddMultiplier(ACTIONS.MINE, TUNING.WGC0310_STUNNED_WORKEFFECTIVENESS_MODIFIER, inst)
+        inst.components.workmultiplier:AddMultiplier(ACTIONS.HAMMER, TUNING.WGC0310_STUNNED_WORKEFFECTIVENESS_MODIFIER, inst)
+    end
+end
+
+local function WGC0310_OnElectricityBecomeNonEmpty(inst)
+    if inst.components.locomotor ~= nil then
+        inst.components.locomotor:SetExternalSpeedMultiplier(inst, "WGC0310_Acceleration", TUNING.WGC0310_ACCELERATION)
+    end
+
+    if inst.components.combat ~= nil then
+        inst.components.combat.damagemultiplier = TUNING.WGC0310_ATTACK_MODIFIER
+    end
+
+    if inst.components.workmultiplier ~= nil then
+        inst.components.workmultiplier:RemoveMultiplier(ACTIONS.CHOP, inst)
+        inst.components.workmultiplier:RemoveMultiplier(ACTIONS.MINE, inst)
+        inst.components.workmultiplier:RemoveMultiplier(ACTIONS.HAMMER, inst)
+
+        inst.components.workmultiplier:AddMultiplier(ACTIONS.CHOP, TUNING.WGC0310_WORKEFFECTIVENESS_MODIFIER, inst)
+        inst.components.workmultiplier:AddMultiplier(ACTIONS.MINE, TUNING.WGC0310_WORKEFFECTIVENESS_MODIFIER, inst)
+        inst.components.workmultiplier:AddMultiplier(ACTIONS.HAMMER, TUNING.WGC0310_WORKEFFECTIVENESS_MODIFIER, inst)
+    end
+end
+
 local function WGC0310_OnEat(inst, food)
     if food ~= nil and food.components.edible ~= nil then
         if food.components.edible.foodtype == FOODTYPE.GEARS then
-            -- can heal by eating gears, 75 health per gear
+            -- can heal by eating gears, 75 health per gear, also recover full electricity
             inst.components.health:DoDelta(75)
+            inst.components.wgc_electricity:DoDelta(1500)
             inst.SoundEmitter:PlaySound("dontstarve/characters/wx78/levelup")
         end
     end
@@ -47,9 +125,21 @@ local function WGC0310_AttackConsumesElectricity(inst, data)
     end
 end
 
+local function WGC0310_WorkConsumesElectricity(inst, data)
+    if inst.components.wgc_electricity ~= nil then
+        inst.components.wgc_electricity:DoDelta(-2, true)
+    end
+end
+
 local function WGC0310_HungerBurn(inst)
+    if inst:HasTag("playerghost") then
+        return
+    end
+
     if inst.components.hunger ~= nil and inst.components.wgc_electricity ~= nil then
-        if inst.components.wgc_electricity.current <= inst.components.wgc_electricity.max - 10 then
+        if inst.components.wgc_electricity.current <= inst.components.wgc_electricity.max - 10 and 
+            inst.components.hunger.current > 0
+        then
             -- if the electricity is not full, burn hunger to charge it
             inst.components.hunger:DoDelta(-1, true)
             inst.components.wgc_electricity:DoDelta(10, true)
@@ -69,6 +159,15 @@ local function master_postinit(inst)
 
     -- this character uses electricity system specific to WGC0310
     inst:AddComponent("wgc_electricity")
+    inst:ListenForEvent("onattackother", WGC0310_AttackConsumesElectricity)
+    inst.components.workmultiplier:AddMultiplier(ACTIONS.CHOP, TUNING.WGC0310_WORKEFFECTIVENESS_MODIFIER, inst)
+    inst.components.workmultiplier:AddMultiplier(ACTIONS.MINE, TUNING.WGC0310_WORKEFFECTIVENESS_MODIFIER, inst)
+    inst.components.workmultiplier:AddMultiplier(ACTIONS.HAMMER, TUNING.WGC0310_WORKEFFECTIVENESS_MODIFIER, inst)
+    inst:ListenForEvent("working", WGC0310_WorkConsumesElectricity)
+    inst:ListenForEvent("tilling", WGC0310_WorkConsumesElectricity)
+
+    inst:ListenForEvent("wgc_electricity_empty", WGC0310_OnElectricityBecomeEmpty)
+    inst:ListenForEvent("wgc_electricity_nonempty", WGC0310_OnElectricityBecomeNonEmpty)
 
     -- this character has quite high health and resistance to damage
     -- unfortunately, it cannot be healed by eating conventional food
@@ -96,8 +195,7 @@ local function master_postinit(inst)
         inst.components.eater:SetAbsorptionModifiers(0, 1, 0)
     end
 
-    inst.components.combat.damagemultiplier = 2
-    inst:ListenForEvent("onattackother", WGC0310_AttackConsumesElectricity)
+    inst.components.combat.damagemultiplier = TUNING.WGC0310_ATTACK_MODIFIER
 
     inst.Light:Enable(true)
     inst.Light:SetIntensity(.75)
@@ -106,6 +204,11 @@ local function master_postinit(inst)
     inst.Light:SetRadius(1)
 
     inst.components.locomotor:SetExternalSpeedMultiplier(inst, "WGC0310_Acceleration", TUNING.WGC0310_ACCELERATION)
+
+    inst.OnLoad = WGC0310_OnLoad
+    inst.OnNewSpawn = WGC0310_OnLoad
+    inst.OnSave = WGC0310_OnSave
+    inst:ListenForEvent("ms_playerseamlessswaped", WGC0310_OnLoad)
 end
 
 return MakePlayerCharacter("wgc0310", prefabs, assets, common_postinit, master_postinit, prefabs)

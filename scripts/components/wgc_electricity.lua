@@ -13,7 +13,10 @@ local WGCElectricity = Class(function (self, inst)
 end)
 
 function WGCElectricity:DoDec(dt, ignore_damage)
-   local old = self.current
+   -- don't decay when user's ghost
+   if self.inst:HasTag("playerghost") then
+      return
+   end
 
    if self.current > 0 then
       self:DoDelta(-0.1, true)
@@ -32,6 +35,12 @@ function WGCElectricity:DoDelta(delta, overtime)
          newpercent = self.current / self.max,
          overtime = overtime
       })
+
+      if old ~= 0 and self.current == 0 then
+         self.inst:PushEvent("wgc_electricity_empty")
+      elseif old == 0 and self.current ~= 0 then
+         self.inst:PushEvent("wgc_electricity_nonempty")
+      end
    end
 end
 
@@ -43,6 +52,12 @@ function WGCElectricity:ForceUpdate()
       newpercent = self.current / self.max,
       overtime = false
    })
+
+   if self.current == 0 then
+      self.inst:PushEvent("wgc_electricity_empty")
+   else
+      self.inst:PushEvent("wgc_electricity_nonempty")
+   end
 end
 
 return WGCElectricity
