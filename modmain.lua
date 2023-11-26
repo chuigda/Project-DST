@@ -3,9 +3,11 @@ local WGCElectricityBadge = require("widgets/wgc_electricity_badge")
 PrefabFiles = {
    "wgc0310",
    "wgc0310_none",
+   "wgc0310_gear"
 }
 
 Assets = {
+   -- for characters
    Asset("IMAGE", "images/saveslot_portraits/wgc0310.tex"),
    Asset("ATLAS", "images/saveslot_portraits/wgc0310.xml"),
 
@@ -35,12 +37,17 @@ Assets = {
 
    Asset("IMAGE", "images/names_gold_wgc0310.tex"),
    Asset("ATLAS", "images/names_gold_wgc0310.xml"),
+
+   -- for items
+   Asset("ATLAS", "images/inventoryimages/wgc0310_gear.xml"),
+   Asset("IMAGE", "images/inventoryimages/wgc0310_gear.tex"),
 }
 
 AddMinimapAtlas("images/map_icons/wgc0310.xml")
 
 local require = GLOBAL.require
 local STRINGS = GLOBAL.STRINGS
+local TECH = GLOBAL.TECH
 
 STRINGS.CHARACTER_TITLES.wgc0310 = "有感情的机器人"
 STRINGS.CHARACTER_NAMES.wgc0310 = "WGC0310"
@@ -86,3 +93,16 @@ AddClassPostConstruct("widgets/statusdisplays", function (self, owner)
       self.wgc_electricity_badge.num:SetString(math.floor(data.current))
    end)
 end)
+
+STRINGS.NAMES.WGC0310_GEAR = "WGC-0310 的齿轮"
+STRINGS.RECIPE_DESC.WGC0310_GEAR = "可以恢复机器人的生命值，但是无法用于维修或者合成"
+STRINGS.CHARACTERS.GENERIC.DESCRIBE.WGC0310_GEAR = "齿轮的优秀人造替代品，可惜不能 100% 替代"
+
+AddCharacterRecipe("wgc0310_gear", {
+   Ingredient("goldnugget", 1),
+   Ingredient("nitre", 1),
+}, TECH.NONE, {
+   builder_tag = "wgc0310",
+   numtogive = 2,
+   atlas = "images/inventoryimages/wgc0310_gear.xml"
+}, { "TOOLS" })

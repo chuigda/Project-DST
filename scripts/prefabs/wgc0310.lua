@@ -102,10 +102,16 @@ end
 local function WGC0310_OnEat(inst, food)
     if food ~= nil and food.components.edible ~= nil then
         if food.components.edible.foodtype == FOODTYPE.GEARS then
-            -- can heal by eating gears, 75 health per gear, also recover full electricity
-            inst.components.health:DoDelta(75)
-            inst.components.wgc_electricity:DoDelta(1500)
+            -- can heal by eating gears, 125 health per gear
+            inst.components.health:DoDelta(125)
             inst.SoundEmitter:PlaySound("dontstarve/characters/wx78/levelup")
+
+            -- and if this is the original gear (not WGC-0310 made), recover full electricity
+            if food.name == "gears" then
+                inst.components.wgc_electricity.current = inst.components.wgc_electricity.max
+                inst.components.wgc_electricity:ForceUpdate()
+            end
+            inst.components.wgc_electricity:DoDelta(1500)
         end
     end
 end
@@ -150,6 +156,7 @@ end
 local function common_postinit(inst)
     inst:AddTag("electricdamageimmune")
     inst:AddTag("soulless")
+    inst:AddTag("wgc0310")
     inst.MiniMapEntity:SetIcon("wgc0310.tex")
 end
 
