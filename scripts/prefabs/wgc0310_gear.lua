@@ -38,7 +38,7 @@ local function fn()
 
    inst:AddComponent("inventoryitem")
    inst.components.inventoryitem.imagename = "wgc0310_gear"
-    inst.components.inventoryitem.atlasname = "images/inventoryimages/wgc0310_gear.xml"
+   inst.components.inventoryitem.atlasname = "images/inventoryimages/wgc0310_gear.xml"
 
    inst:AddComponent("bait")
 

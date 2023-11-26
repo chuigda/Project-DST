@@ -3,7 +3,8 @@ local WGCElectricityBadge = require("widgets/wgc_electricity_badge")
 PrefabFiles = {
    "wgc0310",
    "wgc0310_none",
-   "wgc0310_gear"
+   "wgc0310_gear",
+   "wgc0310_spear"
 }
 
 Assets = {
@@ -41,6 +42,9 @@ Assets = {
    -- for items
    Asset("ATLAS", "images/inventoryimages/wgc0310_gear.xml"),
    Asset("IMAGE", "images/inventoryimages/wgc0310_gear.tex"),
+
+   Asset("ATLAS", "images/inventoryimages/wgc0310_spear.xml"),
+   Asset("IMAGE", "images/inventoryimages/wgc0310_spear.tex")
 }
 
 AddMinimapAtlas("images/map_icons/wgc0310.xml")
@@ -107,3 +111,16 @@ AddCharacterRecipe("wgc0310_gear", {
    numtogive = 2,
    atlas = "images/inventoryimages/wgc0310_gear.xml"
 }, { "TOOLS" })
+
+STRINGS.NAMES.WGC0310_SPEAR = "高振动粒子刀"
+STRINGS.RECIPE_DESC.WGC0310_SPEAR = "不会损坏，但是造成的伤害非常有限"
+STRINGS.CHARACTERS.GENERIC.DESCRIBE.WGC0310_SPEAR = "作为武器还算不错"
+
+AddCharacterRecipe("wgc0310_spear", {
+   Ingredient("goldnugget", 2),
+   Ingredient("wgc0310_gear", 2),
+   Ingredient("spear", 1)
+}, TECH.SCIENCE_ONE, {
+   builder_tag = "wgc0310",
+   atlas = "images/inventoryimages/wgc0310_spear.xml"
+}, { "WEAPONS" })
