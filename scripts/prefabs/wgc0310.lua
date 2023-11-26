@@ -117,7 +117,7 @@ local function WGC0310_OnEat(inst, food)
                 inst.components.wgc_electricity.current = inst.components.wgc_electricity.max
                 inst.components.wgc_electricity:ForceUpdate()
             end
-            inst.components.wgc_electricity:DoDelta(1500)
+            inst.components.wgc_electricity:DoDelta(inst.components.wgc_electricity.max)
         end
     end
 end
@@ -198,7 +198,7 @@ local function master_postinit(inst)
     inst.components.hunger:Pause()
     inst.components.hunger.Resume = inst.components.hunger.Pause
     inst.components.hunger.IsPaused = function (self) return true end
-    inst:DoPeriodicTask(2, WGC0310_HungerBurn)
+    inst:DoPeriodicTask(3, WGC0310_HungerBurn)
 
     inst.components.sanity:SetMax(TUNING.WGC0310_SANITY)
     inst.components.sanity.ignore = true
