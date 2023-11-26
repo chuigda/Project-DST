@@ -101,6 +101,7 @@ STRINGS.CHARACTERS.GENERIC.DESCRIBE.WGC0310_GEAR = "齿轮的优秀人造替代�
 AddCharacterRecipe("wgc0310_gear", {
    Ingredient("goldnugget", 1),
    Ingredient("nitre", 1),
+   Ingredient("flint", 1)
 }, TECH.NONE, {
    builder_tag = "wgc0310",
    numtogive = 2,
