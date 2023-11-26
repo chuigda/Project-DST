@@ -15,7 +15,7 @@ TUNING.WGC0310_HUNGER = 200
 TUNING.WGC0310_SANITY = 200
 TUNING.WGC0310_ABSORPTION_MODIFIER = 0.75
 TUNING.WGC0310_ACCELERATION = 1.1
-TUNING.WGC0310_ATTACK_MODIFIER = 2
+TUNING.WGC0310_ATTACK_MODIFIER = 1.5
 TUNING.WGC0310_WORKEFFECTIVENESS_MODIFIER = 1.5
 
 TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WGC0310 = {
@@ -149,7 +149,7 @@ local function WGC0310_HungerBurn(inst)
     end
 
     if inst.components.hunger ~= nil and inst.components.wgc_electricity ~= nil then
-        if inst.components.wgc_electricity.current <= inst.components.wgc_electricity.max - 10 and 
+        if inst.components.wgc_electricity.current <= inst.components.wgc_electricity.max - 7.5 and 
             inst.components.hunger.current > 0
         then
             -- if the electricity is not full, burn hunger to charge it
@@ -196,6 +196,8 @@ local function master_postinit(inst)
     -- bypass the default hunger decaying logic and implement our own system
     -- relevant with the electricity system
     inst.components.hunger:Pause()
+    inst.components.hunger.Resume = inst.components.hunger.Pause
+    inst.components.hunger.IsPaused = function (self) return true end
     inst:DoPeriodicTask(2, WGC0310_HungerBurn)
 
     inst.components.sanity:SetMax(TUNING.WGC0310_SANITY)

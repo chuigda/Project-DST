@@ -55,7 +55,7 @@ local function fn()
 
     inst:AddComponent("weapon")
     --weapon (from weapon component) added to pristine state for optimization
-    inst.components.weapon:SetDamage(22.5)
+    inst.components.weapon:SetDamage(28)
 
     inst:AddComponent("inspectable")
     inst:AddComponent("inventoryitem")
