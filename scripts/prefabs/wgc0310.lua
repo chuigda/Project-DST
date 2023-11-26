@@ -133,7 +133,7 @@ end
 
 local function WGC0310_AttackConsumesElectricity(inst, data)
     if inst.components.wgc_electricity ~= nil then
-        inst.components.wgc_electricity:DoDelta(-15, true)
+        inst.components.wgc_electricity:DoDelta(-18, true)
     end
 end
 
