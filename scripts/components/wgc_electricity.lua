@@ -4,8 +4,8 @@ end
 
 local WGCElectricity = Class(function (self, inst)
    self.inst = inst
-   self.max = 1200
-   self.current = 1200
+   self.max = 800
+   self.current = 800
 
    -- Electricity decays very slow natually, but consumes quickly when in combat
    local period = 1

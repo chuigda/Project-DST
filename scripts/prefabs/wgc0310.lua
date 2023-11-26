@@ -21,6 +21,7 @@ TUNING.WGC0310_WORKEFFECTIVENESS_MODIFIER = 1.5
 TUNING.GAMEMODE_STARTING_ITEMS.DEFAULT.WGC0310 = {
     "wgc0310_gear",
     "wgc0310_gear",
+    "wgc0310_gear"
 }
 
 local start_inv = {}

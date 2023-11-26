@@ -108,7 +108,7 @@ AddCharacterRecipe("wgc0310_gear", {
    Ingredient("flint", 1)
 }, TECH.NONE, {
    builder_tag = "wgc0310",
-   numtogive = 2,
+   numtogive = 3,
    atlas = "images/inventoryimages/wgc0310_gear.xml"
 }, { "TOOLS" })
 
