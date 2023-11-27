@@ -1,7 +1,7 @@
 local Badge = require "widgets/badge"
 
 local WGCElectricityBadge = Class(Badge, function (self, owner)
-   Badge._ctor(self, nil, owner, { 191 / 255, 191 / 255, 191 / 255, 1 }, nil, nil, nil, true)
+   Badge._ctor(self, nil, owner, { 66 / 255, 187 / 255, 212 / 255, 1 }, nil, nil, nil, true)
    self:StartUpdating()
 end)
 
