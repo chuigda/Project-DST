@@ -154,8 +154,8 @@ local function WGC0310_Metabolism(inst)
     local hunger_delta = 0.0 -- if doing nothing, consume 0 hunger per second
 
     if inst.components.hunger ~= nil and inst.components.wgc_electricity ~= nil then
-        if (inst.components.wgc_electricity.current + electricity_delta) <= inst.components.wgc_electricity.max - 2 and
-            inst.components.hunger.current >= 0.25
+        if inst.components.hunger.current >= 0.25 and 
+           (inst.components.wgc_electricity.current + electricity_delta) <= inst.components.wgc_electricity.max - 2
         then
             -- under such circumstance, we can use hunger to recover electricity,
             -- 1 hunger point can recover 8 electricity points in 4 seconds
@@ -166,10 +166,11 @@ local function WGC0310_Metabolism(inst)
 
     -- then, search through the inventory to see if there's battery items
     -- if there is, consume the battery to recover electricity
-    if inst.inventory ~= nil then
-        for k, v in pairs(inst.inventory.itemslots) do
-            if v ~= nil and v.components.wgc_electricity_provider ~= nil and
-                v.components.wgc_electricity_provider:CanProvide()
+    if inst.components.inventory ~= nil then
+        for k, v in pairs(inst.components.inventory.itemslots) do
+            if v ~= nil and
+               v.components.wgc_electricity_provider ~= nil and
+               v.components.wgc_electricity_provider:CanProvide() and
                (inst.components.wgc_electricity.current + electricity_delta) <= (inst.components.wgc_electricity.max - v.components.wgc_electricity_provider.amount)
             then
                 v.components.wgc_electricity_provider:Provide()
@@ -180,6 +181,7 @@ local function WGC0310_Metabolism(inst)
 
     -- finally, do the delta
     if electricity_delta > 0.0 then
+        print("electricity_delta = ", electricity_delta)
         inst.components.wgc_electricity:DoDelta(electricity_delta, true)
     end
     if hunger_delta < 0.0 then

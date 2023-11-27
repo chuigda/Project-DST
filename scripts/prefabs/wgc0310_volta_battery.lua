@@ -44,21 +44,21 @@ local function fn()
    inst.components.fillable.acceptsoceanwater = true
 
    inst:AddComponent("finiteuses")
-   inst.components.finiteuses:SetMaxUses(100)
-   inst.components.finiteuses:SetUses(100)
+   inst.components.finiteuses:SetMaxUses(300)
+   inst.components.finiteuses:SetUses(300)
 
    inst:AddComponent("wgc_electricity_provider")
    inst.components.wgc_electricity_provider.amount = 3.0
    inst.components.wgc_electricity_provider:SetCheckCanProvideFn(function (self)
-      if self.inst.components.finiteuses == nil then
+      if inst.components.finiteuses == nil then
          return true
       end
-      return self.inst.components.finiteuses:GetUses() > 0
+      return inst.components.finiteuses:GetUses() > 0
    end)
 
    inst.components.wgc_electricity_provider:SetOnProvideFn(function (self, amount)
-      if self.inst.components.finiteuses ~= nil then
-         self.inst.components.finiteuses:Use(1)
+      if inst.components.finiteuses ~= nil then
+         inst.components.finiteuses:Use(1)
       end
    end)
 
