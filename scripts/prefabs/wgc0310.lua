@@ -144,19 +144,46 @@ local function WGC0310_WorkConsumesElectricity(inst, data)
     end
 end
 
-local function WGC0310_HungerBurn(inst)
+local function WGC0310_Metabolism(inst)
     if inst:HasTag("playerghost") then
+        -- don't do any metabolism when user's ghost
         return
     end
 
+    local electricity_delta = -0.2 -- if doing nothing, consume 0.2 electricity per second
+    local hunger_delta = 0.0 -- if doing nothing, consume 0 hunger per second
+
     if inst.components.hunger ~= nil and inst.components.wgc_electricity ~= nil then
-        if inst.components.wgc_electricity.current <= inst.components.wgc_electricity.max - 7.5 and 
-            inst.components.hunger.current > 0
+        if (inst.components.wgc_electricity.current + electricity_delta) <= inst.components.wgc_electricity.max - 2 and
+            inst.components.hunger.current >= 0.25
         then
-            -- if the electricity is not full, burn hunger to charge it
-            inst.components.hunger:DoDelta(-1, true)
-            inst.components.wgc_electricity:DoDelta(7.5, true)
+            -- under such circumstance, we can use hunger to recover electricity,
+            -- 1 hunger point can recover 8 electricity points in 4 seconds
+            electricity_delta = electricity_delta + 2
+            hunger_delta = hunger_delta - 0.25
         end
+    end
+
+    -- then, search through the inventory to see if there's battery items
+    -- if there is, consume the battery to recover electricity
+    if inst.inventory ~= nil then
+        for k, v in pairs(inst.inventory.itemslots) do
+            if v ~= nil and v.components.wgc_electricity_provider ~= nil and
+                v.components.wgc_electricity_provider:CanProvide()
+               (inst.components.wgc_electricity.current + electricity_delta) <= (inst.components.wgc_electricity.max - v.components.wgc_electricity_provider.amount)
+            then
+                v.components.wgc_electricity_provider:Provide()
+                electricity_delta = electricity_delta + v.components.wgc_electricity_provider.amount
+            end
+        end
+    end
+
+    -- finally, do the delta
+    if electricity_delta > 0.0 then
+        inst.components.wgc_electricity:DoDelta(electricity_delta, true)
+    end
+    if hunger_delta < 0.0 then
+        inst.components.hunger:DoDelta(hunger_delta, true)
     end
 end
 
@@ -199,7 +226,8 @@ local function master_postinit(inst)
     inst.components.hunger:Pause()
     inst.components.hunger.Resume = inst.components.hunger.Pause
     inst.components.hunger.IsPaused = function (self) return true end
-    inst:DoPeriodicTask(3, WGC0310_HungerBurn)
+
+    inst:DoPeriodicTask(1, WGC0310_Metabolism)
 
     inst.components.sanity:SetMax(TUNING.WGC0310_SANITY)
     inst.components.sanity.ignore = true

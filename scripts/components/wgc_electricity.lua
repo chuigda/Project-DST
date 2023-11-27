@@ -1,6 +1,6 @@
-local function OnTaskTick(inst, self, period)
-   self:DoDec(period)
-end
+-- local function OnTaskTick(inst, self, period)
+--    self:DoDec(period)
+-- end
 
 local WGCElectricity = Class(function (self, inst)
    self.inst = inst
@@ -8,20 +8,22 @@ local WGCElectricity = Class(function (self, inst)
    self.current = 800
 
    -- Electricity decays very slow natually, but consumes quickly when in combat
-   local period = 1
-   self.inst:DoPeriodicTask(period, OnTaskTick, nil, self, period)
+   -- local period = 1
+   -- self.inst:DoPeriodicTask(period, OnTaskTick, nil, self, period)
+
+   -- electricity decaying handled elsewhere
 end)
 
-function WGCElectricity:DoDec(dt, ignore_damage)
-   -- don't decay when user's ghost
-   if self.inst:HasTag("playerghost") then
-      return
-   end
+-- function WGCElectricity:DoDec(dt, ignore_damage)
+--    -- don't decay when user's ghost
+--    if self.inst:HasTag("playerghost") then
+--       return
+--    end
 
-   if self.current > 0 then
-      self:DoDelta(-0.2, true)
-   end
-end
+--    if self.current > 0 then
+--       self:DoDelta(-0.2, true)
+--    end
+-- end
 
 function WGCElectricity:DoDelta(delta, overtime)
    local old = self.current

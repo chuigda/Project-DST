@@ -4,7 +4,8 @@ PrefabFiles = {
    "wgc0310",
    "wgc0310_none",
    "wgc0310_gear",
-   "wgc0310_spear"
+   "wgc0310_spear",
+   "wgc0310_volta_battery"
 }
 
 Assets = {
@@ -44,7 +45,10 @@ Assets = {
    Asset("IMAGE", "images/inventoryimages/wgc0310_gear.tex"),
 
    Asset("ATLAS", "images/inventoryimages/wgc0310_spear.xml"),
-   Asset("IMAGE", "images/inventoryimages/wgc0310_spear.tex")
+   Asset("IMAGE", "images/inventoryimages/wgc0310_spear.tex"),
+
+   Asset("ATLAS", "images/inventoryimages/wgc0310_volta_battery.xml"),
+   Asset("IMAGE", "images/inventoryimages/wgc0310_volta_battery.tex")
 }
 
 AddMinimapAtlas("images/map_icons/wgc0310.xml")
@@ -124,3 +128,17 @@ AddCharacterRecipe("wgc0310_spear", {
    builder_tag = "wgc0310",
    atlas = "images/inventoryimages/wgc0310_spear.xml"
 }, { "WEAPONS" })
+
+STRINGS.NAMES.WGC0310_VOLTA_BATTERY = "伏打电堆"
+STRINGS.RECIPE_DESC.WGC0310_VOLTA_BATTERY = "置于物品栏中时可以缓慢恢复机器人的电能"
+STRINGS.CHARACTERS.GENERIC.DESCRIBE.WGC0310_VOLTA_BATTERY = "原始的电池装置"
+
+AddCharacterRecipe("wgc0310_volta_battery", {
+   Ingredient("goldnugget", 1),
+   Ingredient("papyrus", 5),
+   Ingredient("froglegs", 1),
+   Ingredient("saltrock", 1)
+}, TECH.SCIENCE_ONE, {
+   builder_tag = "wgc0310",
+   atlas = "images/inventoryimages/wgc0310_volta_battery.xml"
+})
