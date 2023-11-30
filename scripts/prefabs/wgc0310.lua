@@ -168,8 +168,7 @@ local function WGC0310_Metabolism(inst)
     -- if there is, consume the battery to recover electricity
     if inst.components.inventory ~= nil then
         for k, v in pairs(inst.components.inventory.itemslots) do
-            if v ~= nil and
-               v.components.wgc_electricity_provider ~= nil and
+            if v.components.wgc_electricity_provider ~= nil and
                v.components.wgc_electricity_provider:CanProvide() and
                (inst.components.wgc_electricity.current + electricity_delta) <= (inst.components.wgc_electricity.max - v.components.wgc_electricity_provider.amount)
             then
@@ -180,11 +179,10 @@ local function WGC0310_Metabolism(inst)
     end
 
     -- finally, do the delta
-    if electricity_delta > 0.0 then
-        print("electricity_delta = ", electricity_delta)
+    if electricity_delta ~= 0.0 then
         inst.components.wgc_electricity:DoDelta(electricity_delta, true)
     end
-    if hunger_delta < 0.0 then
+    if hunger_delta ~= 0.0 then
         inst.components.hunger:DoDelta(hunger_delta, true)
     end
 end
