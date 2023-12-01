@@ -134,13 +134,13 @@ end
 
 local function WGC0310_AttackConsumesElectricity(inst, data)
     if inst.components.wgc_electricity ~= nil then
-        inst.components.wgc_electricity:DoDelta(-18, true)
+        inst.components.wgc_electricity:DoDelta(-12, true)
     end
 end
 
 local function WGC0310_WorkConsumesElectricity(inst, data)
     if inst.components.wgc_electricity ~= nil then
-        inst.components.wgc_electricity:DoDelta(-3, true)
+        inst.components.wgc_electricity:DoDelta(-4, true)
     end
 end
 
@@ -160,7 +160,7 @@ local function WGC0310_Metabolism(inst)
             -- under such circumstance, we can use hunger to recover electricity,
             -- 1 hunger point can recover 8 electricity points in 4 seconds
             electricity_delta = electricity_delta + 2
-            hunger_delta = hunger_delta - 0.25
+            hunger_delta = hunger_delta - 0.2
         end
     end
 
