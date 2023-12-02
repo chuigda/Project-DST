@@ -33,12 +33,13 @@ local prefabs = FlattenTree(start_inv, true)
 local function WGC0310_OnBecomePlayerCharacter(inst)
     inst.components.hunger:SetPercent(0.5)
 
-    inst.components.wgc_electricity.current = 750
+    inst.components.wgc_electricity.current = inst.components.wgc_electricity.current.max
+    inst.components.sanity.current = inst.components.sanity.max
     inst.components.wgc_electricity:ForceUpdate()
 end
 
 local function WGC0310_OnBecomeGhost(inst)
-    inst.components.wgc_electricity.current = 750
+    inst.components.wgc_electricity.current = inst.components.wgc_electricity.current.max
     inst.components.wgc_electricity:ForceUpdate()
 end
 
@@ -147,6 +148,13 @@ end
 local function WGC0310_Metabolism(inst)
     if inst:HasTag("playerghost") then
         -- don't do any metabolism when user's ghost
+        return
+    end
+
+    if inst.components.health ~= nil and inst.components.health.invincible then
+        -- in this mode, always fill the electricity to full
+        inst.components.wgc_electricity.current = inst.components.wgc_electricity.max
+        inst.components.wgc_electricity:ForceUpdate()
         return
     end
 
