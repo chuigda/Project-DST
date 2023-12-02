@@ -11,6 +11,12 @@ local function onequip(inst, owner)
     owner.AnimState:OverrideSymbol("swap_object", "wgc0310_staff_blue", "swap_object")
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
+
+    if owner.prefab == "wgc0310" then
+        inst.components.weapon:SetDamage(42)
+    else
+        inst.components.weapon:SetDamage(0)
+    end
 end
 
 local function onunequip(inst, owner)
@@ -42,7 +48,14 @@ local function onattack_blue(inst, attacker, target)
     end
 
 	if target.components.freezable ~= nil and target:IsValid() then
-        target.components.freezable:AddColdness(10)
+        if attacker.prefab == "wgc0310" then
+            if attacker.components.wgc_electricity.current >= 35 then
+                attacker.components.wgc_electricity:DoDelta(-18)
+                target.components.freezable:AddColdness(15)
+            end
+        else
+            target.components.freezable:AddColdness(1)
+        end
         target.components.freezable:SpawnShatterFX()
     end
 end
@@ -56,8 +69,8 @@ local function fn()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("wgc0310_staff_blue")
-    inst.AnimState:SetBuild("wgc0310_staff_blue")
+    inst.AnimState:SetBank("wgc0310_staff_blue_ground")
+    inst.AnimState:SetBuild("wgc0310_staff_blue_ground")
     inst.AnimState:PlayAnimation("anim")
 
     inst:AddTag("icestaff")
@@ -75,8 +88,8 @@ local function fn()
     end
 
     inst:AddComponent("weapon")
-    inst.components.weapon:SetDamage(40)
-    inst.components.weapon:SetRange(8, 16)
+    inst.components.weapon:SetDamage(0)
+    inst.components.weapon:SetRange(12, 20)
     inst.components.weapon:SetOnAttack(onattack_blue)
     inst.components.weapon:SetProjectile("ice_projectile")
 

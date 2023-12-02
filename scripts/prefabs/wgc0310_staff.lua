@@ -27,8 +27,8 @@ local function fn()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("wgc0310_staff")
-    inst.AnimState:SetBuild("wgc0310_staff")
+    inst.AnimState:SetBank("wgc0310_staff_ground")
+    inst.AnimState:SetBuild("wgc0310_staff_ground")
     inst.AnimState:PlayAnimation("anim")
 
     inst:AddTag("sharp")
