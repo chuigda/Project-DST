@@ -1,3 +1,9 @@
+local has_enabled_achievement_chasni = GLOBAL.KnownModIndex:IsModEnabled(GLOBAL.KnownModIndex:GetModActualName("Achievement Chasni Mod"))
+
+if has_enabled_achievement_chasni then
+    print("WGC0310: Achievement Chasni Mod is enabled, electricity system will be adjusted accordingly!")
+end
+
 local MakePlayerCharacter = require "prefabs/player_common"
 
 local assets = {
@@ -135,7 +141,14 @@ end
 
 local function WGC0310_AttackConsumesElectricity(inst, data)
     if inst.components.wgc_electricity ~= nil then
-        inst.components.wgc_electricity:DoDelta(-12, true)
+        if has_enabled_achievement_chasni and inst.currentlevel ~= nil then
+            -- in case that user enabled Achievement Chasni Mod, the electricity consumption is
+            -- reduced by Chasni level
+            local consumption = math.clamp(12 - inst.currentlevel * 0.5, 0, 12)
+            inst.components.wgc_electricity:DoDelta(-consumption, true)
+        else
+            inst.components.wgc_electricity:DoDelta(-12, true)
+        end
     end
 end
 
@@ -160,6 +173,16 @@ local function WGC0310_Metabolism(inst)
 
     local electricity_delta = -0.2 -- if doing nothing, consume 0.2 electricity per second
     local hunger_delta = 0.0 -- if doing nothing, consume 0 hunger per second
+
+    if has_enabled_achievement_chasni then
+        -- In Achievement Chasni Mod there's no "official" buffs for our quite weird electricity
+        -- system, and there's unlikely to be one. So instead, we implement our own buff here
+        -- to make the electricity system more reasonable.
+        if inst.currentlevel ~= nil then
+            -- provide 0.3 electricity recover per second per Chasni level
+            electricity_delta = electricity_delta + 0.3 * inst.currentlevel
+        end
+    end
 
     if inst.components.hunger ~= nil and inst.components.wgc_electricity ~= nil then
         if inst.components.hunger.current >= 0.25 and 
@@ -223,7 +246,12 @@ local function master_postinit(inst)
     inst.components.health:SetMaxHealth(TUNING.WGC0310_HEALTH)
     inst.components.health.externalabsorbmodifiers:SetModifier(inst, TUNING.WGC0310_ABSORPTION_MODIFIER, "WGC0310_Absorption")
     inst.components.health.fire_damage_scale = 0
-    inst.components.health.canheal = false
+
+    -- if Achievement Chasni Mod is enabled, don't disable healing because Achievement Chasni mod has
+    -- some advancements relevant with healing, and we don't want to make that system nonsense
+    if not has_enabled_achievement_chasni then
+        inst.components.health.canheal = false
+    end
 
     inst.components.hunger:SetMax(TUNING.WGC0310_HUNGER)
     -- this character never really gets hungry, but it still has a (decaying) hunger bar
