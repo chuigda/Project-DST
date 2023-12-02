@@ -226,6 +226,9 @@ local function common_postinit(inst)
     inst:AddTag("soulless")
     inst:AddTag("wgc0310")
     inst.MiniMapEntity:SetIcon("wgc0310.tex")
+
+    inst.net_wgc_electricity_max = net_ushortint(inst.GUID, "wgc_electricity_max", "wgc_electricity_maxdirty")
+    inst.net_wgc_electricity_current = net_ushortint(inst.GUID, "wgc_electricity_current", "wgc_electricity_currentdirty")
 end
 
 local function master_postinit(inst)

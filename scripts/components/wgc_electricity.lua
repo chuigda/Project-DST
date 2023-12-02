@@ -7,11 +7,6 @@ local WGCElectricity = Class(function (self, inst)
    self.max = 800
    self.current = 800
 
-   self.net_max = net_ushortint(inst.GUID, "wgc_electricity_max", "wgc_electricity_maxdirty")
-   self.net_max:set(self.max)
-   self.net_current = net_ushortint(inst.GUID, "wgc_electricity_current", "wgc_electricity_currentdirty")
-   self.net_current:set(self.current)
-
    -- Electricity decays very slow natually, but consumes quickly when in combat
    -- local period = 1
    -- self.inst:DoPeriodicTask(period, OnTaskTick, nil, self, period)
@@ -35,8 +30,8 @@ function WGCElectricity:DoDelta(delta, overtime)
    self.current = math.clamp(self.current + delta, 0, self.max)
 
    if old ~= self.current then
-      self.net_max:set(self.max)
-      self.net_current:set(self.current)
+      self.inst.net_wgc_electricity_max:set(self.max)
+      self.inst.net_wgc_electricity_current:set(self.current)
 
       if old ~= 0 and self.current == 0 then
          self.inst:PushEvent("wgc_electricity_empty")
@@ -47,8 +42,8 @@ function WGCElectricity:DoDelta(delta, overtime)
 end
 
 function WGCElectricity:ForceUpdate()
-   self.net_max:set(self.max)
-   self.net_current:set(self.current)
+   self.inst.net_wgc_electricity_max:set(self.max)
+   self.inst.net_wgc_electricity_current:set(self.current)
 
    if self.current == 0 then
       self.inst:PushEvent("wgc_electricity_empty")
