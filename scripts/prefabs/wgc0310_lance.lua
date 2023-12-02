@@ -61,4 +61,4 @@ local function fn()
     return inst
 end
 
-return Prefab("wgc0310_staff", fn, assets)
+return Prefab("wgc0310_lance", fn, assets)

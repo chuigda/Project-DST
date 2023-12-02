@@ -6,6 +6,7 @@ PrefabFiles = {
    "wgc0310_gear",
    "wgc0310_staff",
    "wgc0310_lance",
+   "wgc0310_staff_blue",
    "wgc0310_volta_battery"
 }
 
@@ -157,6 +158,20 @@ AddCharacterRecipe("wgc0310_lance", {
    Ingredient("wgc0310_gear", 2),
    Ingredient("wgc0310_staff", 1),
    Ingredient("spear", 1),
+   Ingredient("goldnugget", 1)
+}, TECH.SCIENCE_TWO, {
+   builder_tag = "wgc0310",
+   atlas = "images/inventoryimages/wgc0310_spear.xml"
+}, { "MAGIC" })
+
+STRINGS.NAMES.WGC0310_STAFF_BLUE = "蓝宝石机械法杖"
+STRINGS.RECIPE_DESC.WGC0310_STAFF_BLUE = "在机械法杖中安装了蓝宝石，可以发射冷冻射线"
+STRINGS.CHARACTERS.GENERIC.DESCRIBE.WGC0310_STAFF_BLUE = "冷冻射线，冷冻射线，冷冻射线！"
+
+AddCharacterRecipe("wgc0310_staff_blue", {
+   Ingredient("wgc0310_gear", 2),
+   Ingredient("wgc0310_staff", 1),
+   Ingredient("bluegem", 1),
    Ingredient("goldnugget", 1)
 }, TECH.SCIENCE_TWO, {
    builder_tag = "wgc0310",
