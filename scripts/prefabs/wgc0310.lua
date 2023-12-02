@@ -1,4 +1,4 @@
-local has_enabled_achievement_chasni = GLOBAL.KnownModIndex:IsModEnabled(GLOBAL.KnownModIndex:GetModActualName("Achievement Chasni Mod"))
+local has_enabled_achievement_chasni = KnownModIndex:IsModEnabled(KnownModIndex:GetModActualName("Achievement Chasni Mod"))
 
 if has_enabled_achievement_chasni then
     print("WGC0310: Achievement Chasni Mod is enabled, electricity system will be adjusted accordingly!")
@@ -212,6 +212,9 @@ local function WGC0310_Metabolism(inst)
     -- finally, do the delta
     if electricity_delta ~= 0.0 then
         inst.components.wgc_electricity:DoDelta(electricity_delta, true)
+    else
+        -- even if there's no change, also trigger a forced update to inform HUD
+        inst.components.wgc_electricity:ForceUpdate()
     end
     if hunger_delta ~= 0.0 then
         inst.components.hunger:DoDelta(hunger_delta, true)
