@@ -50,7 +50,7 @@ local function onattack_blue(inst, attacker, target)
 	if target.components.freezable ~= nil and target:IsValid() then
         if attacker.prefab == "wgc0310" then
             if attacker.components.wgc_electricity.current >= 35 then
-                attacker.components.wgc_electricity:DoDelta(-18)
+                attacker.components.wgc_electricity:DoDelta(-8)
                 target.components.freezable:AddColdness(15)
             end
         else
