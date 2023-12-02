@@ -1,4 +1,6 @@
-local has_enabled_achievement_chasni = KnownModIndex:IsModEnabled(KnownModIndex:GetModActualName("Achievement Chasni Mod"))
+local has_enabled_achievement_chasni = KnownModIndex:IsModEnabled("workshop-2937640068") -- Steam
+    or KnownModIndex:IsModEnabled("workshop-2199027653598543777") -- WeGame, a personal porting
+    or KnownModIndex:IsModEnabled(KnownModIndex:GetModActualName("Achievement Chasni Mod")) -- fallback way, detect by mod name
 
 if has_enabled_achievement_chasni then
     print("WGC0310: Achievement Chasni Mod is enabled, electricity system will be adjusted accordingly!")
@@ -144,7 +146,7 @@ local function WGC0310_AttackConsumesElectricity(inst, data)
         if has_enabled_achievement_chasni and inst.currentlevel ~= nil then
             -- in case that user enabled Achievement Chasni Mod, the electricity consumption is
             -- reduced by Chasni level
-            local consumption = math.clamp(12 - inst.currentlevel * 0.5, 0, 12)
+            local consumption = math.clamp(12 - inst.currentlevel:value() * 0.5, 0, 12)
             inst.components.wgc_electricity:DoDelta(-consumption, true)
         else
             inst.components.wgc_electricity:DoDelta(-12, true)
@@ -174,14 +176,12 @@ local function WGC0310_Metabolism(inst)
     local electricity_delta = -0.2 -- if doing nothing, consume 0.2 electricity per second
     local hunger_delta = 0.0 -- if doing nothing, consume 0 hunger per second
 
-    if has_enabled_achievement_chasni then
+    if has_enabled_achievement_chasni and inst.currentlevel ~= nil then
         -- In Achievement Chasni Mod there's no "official" buffs for our quite weird electricity
         -- system, and there's unlikely to be one. So instead, we implement our own buff here
-        -- to make the electricity system more reasonable.
-        if inst.currentlevel ~= nil then
-            -- provide 0.3 electricity recover per second per Chasni level
-            electricity_delta = electricity_delta + 0.3 * inst.currentlevel
-        end
+        -- to make the electricity system more reasonable. We're provide 0.3 electricity recover per
+        -- second per Chasni level.
+        electricity_delta = electricity_delta + 0.3 * inst.currentlevel:value()
     end
 
     if inst.components.hunger ~= nil and inst.components.wgc_electricity ~= nil then
