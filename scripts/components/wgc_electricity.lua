@@ -8,7 +8,9 @@ local WGCElectricity = Class(function (self, inst)
    self.current = 800
 
    self.net_max = net_ushortint(inst.GUID, "wgc_electricity_max", "wgc_electricity_maxdirty")
+   self.net_max:set(self.max)
    self.net_current = net_ushortint(inst.GUID, "wgc_electricity_current", "wgc_electricity_currentdirty")
+   self.net_current:set(self.current)
 
    -- Electricity decays very slow natually, but consumes quickly when in combat
    -- local period = 1
