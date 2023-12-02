@@ -1,5 +1,8 @@
-local has_enabled_achievement_chasni = KnownModIndex:IsModEnabled("workshop-2937640068") -- Steam
-    or KnownModIndex:IsModEnabled("workshop-2199027653598543777") -- WeGame, a personal porting
+local has_enabled_achievement_chasni = KnownModIndex:IsModEnabled("workshop-2937640068") -- Steam original
+    or KnownModIndex:IsModEnabled("workshop-2199027653598543777") -- WeGame portings
+    or KnownModIndex:IsModEnabled("workshop-2199027653598541538")
+    or KnownModIndex:IsModEnabled("workshop-2199027653598543914")
+    or KnownModIndex:IsModEnabled("workshop-2199027653598542318")
     or KnownModIndex:IsModEnabled(KnownModIndex:GetModActualName("Achievement Chasni Mod")) -- fallback way, detect by mod name
 
 if has_enabled_achievement_chasni then
