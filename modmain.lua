@@ -104,9 +104,12 @@ AddClassPostConstruct("widgets/statusdisplays", function (self, owner)
    self.wgc_electricity_badge:SetPosition(self.column3, -40, 0)
 
    -- listen to electricity delta event
-   owner:ListenForEvent("wgc_electricity_delta", function (inst, data)
-      self.wgc_electricity_badge:SetPercent(data.newpercent)
-      self.wgc_electricity_badge.num:SetString(math.floor(data.current))
+   owner:ListenForEvent("wgc_electricity_currentdirty", function (inst, data)
+      local max = inst.components.wgc_electricity.net_max:value()
+      local current = inst.components.wgc_electricity.net_current:value()
+
+      self.wgc_electricity_badge:SetPercent(current / max)
+      self.wgc_electricity_badge.num:SetString(tostring(math.floor(current)))
    end)
 end)
 
