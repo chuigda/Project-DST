@@ -139,7 +139,7 @@ STRINGS.CHARACTERS.GENERIC.DESCRIBE.WGC0310_STAFF = "创造，充满潜力！"
 
 AddCharacterRecipe("wgc0310_staff", {
    Ingredient("wgc0310_gear", 2),
-   Ingredient("twig", 2),
+   Ingredient("twigs", 2),
 }, TECH.SCIENCE_TWO, {
    builder_tag = "wgc0310",
    atlas = "images/inventoryimages/wgc0310_spear.xml"
