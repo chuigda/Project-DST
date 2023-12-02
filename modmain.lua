@@ -50,6 +50,9 @@ Assets = {
    Asset("ANIM", "anim/wgc0310_staff.zip"),
 	Asset("ANIM", "anim/wgc0310_staff_ground.zip"),
 
+   Asset("ANIM", "anim/wgc0310_lance.zip"),
+	Asset("ANIM", "anim/wgc0310_lance_ground.zip"),
+
    Asset("ATLAS", "images/inventoryimages/wgc0310_volta_battery.xml"),
    Asset("IMAGE", "images/inventoryimages/wgc0310_volta_battery.tex")
 }
@@ -140,6 +143,20 @@ STRINGS.CHARACTERS.GENERIC.DESCRIBE.WGC0310_STAFF = "创造，充满潜力！"
 AddCharacterRecipe("wgc0310_staff", {
    Ingredient("wgc0310_gear", 2),
    Ingredient("twigs", 2),
+}, TECH.SCIENCE_TWO, {
+   builder_tag = "wgc0310",
+   atlas = "images/inventoryimages/wgc0310_spear.xml"
+}, { "MAGIC" })
+
+STRINGS.NAMES.WGC0310_LANCE = "动力长枪"
+STRINGS.RECIPE_DESC.WGC0310_LANCE = "使用电能驱动的长枪，能够造成不俗的伤害"
+STRINGS.CHARACTERS.GENERIC.DESCRIBE.WGC0310_STAFF = "捅他一百个透明窟窿！"
+
+AddCharacterRecipe("wgc0310_lance", {
+   Ingredient("wgc0310_gear", 2),
+   Ingredient("wgc0310_staff", 1),
+   Ingredient("spear", 1),
+   Ingredient("goldnugget", 1)
 }, TECH.SCIENCE_TWO, {
    builder_tag = "wgc0310",
    atlas = "images/inventoryimages/wgc0310_spear.xml"
