@@ -5,6 +5,7 @@ PrefabFiles = {
    "wgc0310_none",
    "wgc0310_gear",
    "wgc0310_spear",
+   "wgc0310_staff",
    "wgc0310_volta_battery"
 }
 
@@ -46,6 +47,9 @@ Assets = {
 
    Asset("ATLAS", "images/inventoryimages/wgc0310_spear.xml"),
    Asset("IMAGE", "images/inventoryimages/wgc0310_spear.tex"),
+
+   Asset("ANIM", "anim/wgc0310_staff.zip"),
+	Asset("ANIM", "anim/wgc0310_staff_ground.zip"),
 
    Asset("ATLAS", "images/inventoryimages/wgc0310_volta_battery.xml"),
    Asset("IMAGE", "images/inventoryimages/wgc0310_volta_battery.tex")
@@ -142,3 +146,15 @@ AddCharacterRecipe("wgc0310_volta_battery", {
    builder_tag = "wgc0310",
    atlas = "images/inventoryimages/wgc0310_volta_battery.xml"
 })
+
+STRINGS.NAMES.WGC0310_STAFF = "空的机械法杖"
+STRINGS.RECIPE_DESC.WGC0310_STAFF = "空的机械法杖，尚未安装任何魔法或科技装置"
+STRINGS.CHARACTERS.GENERIC.DESCRIBE.WGC0310_STAFF = "创造，充满潜力！"
+
+AddCharacterRecipe("wgc0310_staff", {
+   Ingredient("wgc0310_gear", 2),
+   Ingredient("twig", 2),
+}, TECH.SCIENCE_TWO, {
+   builder_tag = "wgc0310",
+   atlas = "images/inventoryimages/wgc0310_spear.xml"
+}, { "MAGIC" })

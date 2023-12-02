@@ -9,7 +9,7 @@ icon = "modicon.tex"
 dst_compatible = true
 dont_starve_compatible = false
 client_only_mod = false
-all_clients_require_mod = true
+all_clients_require_mod = false
 api_version = 10
 
 server_filter_tags = {
