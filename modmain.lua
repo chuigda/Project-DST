@@ -4,7 +4,6 @@ PrefabFiles = {
    "wgc0310",
    "wgc0310_none",
    "wgc0310_gear",
-   "wgc0310_spear",
    "wgc0310_staff",
    "wgc0310_volta_battery"
 }
@@ -119,19 +118,6 @@ AddCharacterRecipe("wgc0310_gear", {
    numtogive = 3,
    atlas = "images/inventoryimages/wgc0310_gear.xml"
 }, { "TOOLS" })
-
-STRINGS.NAMES.WGC0310_SPEAR = "高振动粒子刀"
-STRINGS.RECIPE_DESC.WGC0310_SPEAR = "不会损坏，但是造成的伤害非常有限"
-STRINGS.CHARACTERS.GENERIC.DESCRIBE.WGC0310_SPEAR = "作为武器还算不错"
-
-AddCharacterRecipe("wgc0310_spear", {
-   Ingredient("goldnugget", 2),
-   Ingredient("wgc0310_gear", 2),
-   Ingredient("spear", 1)
-}, TECH.SCIENCE_ONE, {
-   builder_tag = "wgc0310",
-   atlas = "images/inventoryimages/wgc0310_spear.xml"
-}, { "WEAPONS" })
 
 STRINGS.NAMES.WGC0310_VOLTA_BATTERY = "伏打电堆"
 STRINGS.RECIPE_DESC.WGC0310_VOLTA_BATTERY = "置于物品栏中时可以缓慢恢复机器人的电能"
