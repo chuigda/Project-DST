@@ -5,6 +5,7 @@ PrefabFiles = {
    "wgc0310_none",
    "wgc0310_gear",
    "wgc0310_staff",
+   "wgc0310_lance",
    "wgc0310_volta_battery"
 }
 
