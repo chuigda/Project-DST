@@ -11,12 +11,6 @@ local function onequip(inst, owner)
     owner.AnimState:OverrideSymbol("swap_object", "wgc0310_staff_yellow", "swap_object")
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
-
-    if owner.prefab == "wgc0310" then
-        inst.components.weapon:SetDamage(1)
-    else
-        inst.components.weapon:SetDamage(0)
-    end
 end
 
 local function onunequip(inst, owner)
@@ -41,18 +35,17 @@ local function onattack_yellow(inst, attacker, target)
 
 	if target.components.health ~= nil and target:IsValid() then
         if attacker.prefab == "wgc0310" then
-            if attacker.components.wgc_electricity.current > attacker.components.wgc_electricity.max * 0.3 then
-                attacker.components.wgc_electricity:DoDelta(-attacker.components.wgc_electricity.max * 0.3)
-                target.health:DeltaPenalty(target.health.maxhealth * 0.2)
+            if attacker.components.wgc_electricity.current > attacker.components.wgc_electricity.max * 0.2 then
+                attacker.components.wgc_electricity:DoDelta(-attacker.components.wgc_electricity.max * 0.2)
+                target.components.health:DeltaPenalty(target.components.health.maxhealth * 0.12)
             end
         elseif attacker.components.sanity ~= nil then
             -- other charachters can also consume sanity to do this
-            if attacker.components.sanity.current > attacker.components.sanity.max * 0.3 then
-                attacker.components.sanity:DoDelta(-attacker.components.sanity.max * 0.3)
-                target.health:DeltaPenalty(target.health.maxhealth * 0.2)
+            if attacker.components.sanity.current > attacker.components.sanity.max * 0.15 then
+                attacker.components.sanity:DoDelta(-attacker.components.sanity.max * 0.15)
+                target.components.health:DeltaPenalty(target.components.health.maxhealth * 0.08)
             end
         end
-        target.components.freezable:SpawnShatterFX()
     end
 end
 
@@ -83,7 +76,7 @@ local function fn()
     end
 
     inst:AddComponent("weapon")
-    inst.components.weapon:SetDamage(0)
+    inst.components.weapon:SetDamage(65)
     inst.components.weapon:SetRange(12, 20)
     inst.components.weapon:SetOnAttack(onattack_yellow)
     inst.components.weapon:SetProjectile("ice_projectile")
