@@ -7,6 +7,7 @@ PrefabFiles = {
    "wgc0310_staff",
    "wgc0310_lance",
    "wgc0310_staff_blue",
+   "wgc0310_staff_yellow",
    "wgc0310_volta_battery"
 }
 
@@ -54,6 +55,12 @@ Assets = {
 
    Asset("ANIM", "anim/wgc0310_lance.zip"),
 	Asset("ANIM", "anim/wgc0310_lance_ground.zip"),
+
+   Asset("ANIM", "anim/wgc0310_staff_blue.zip"),
+	Asset("ANIM", "anim/wgc0310_staff_blue_ground.zip"),
+
+   Asset("ANIM", "anim/wgc0310_staff_yellow.zip"),
+	Asset("ANIM", "anim/wgc0310_staff_yellow_ground.zip"),
 
    Asset("ATLAS", "images/inventoryimages/wgc0310_volta_battery.xml"),
    Asset("IMAGE", "images/inventoryimages/wgc0310_volta_battery.tex")
@@ -175,6 +182,20 @@ AddCharacterRecipe("wgc0310_staff_blue", {
    Ingredient("wgc0310_gear", 2),
    Ingredient("wgc0310_staff", 1),
    Ingredient("bluegem", 1),
+   Ingredient("goldnugget", 1)
+}, TECH.SCIENCE_TWO, {
+   builder_tag = "wgc0310",
+   atlas = "images/inventoryimages/wgc0310_spear.xml"
+}, { "MAGIC" })
+
+STRINGS.NAMES.WGC0310_STAFF_YELLOW = "黄宝石机械法杖"
+STRINGS.RECIPE_DESC.WGC0310_STAFF_YELLOW = "在机械法杖中安装了黄宝石，攻击可以降低目标的最大生命值"
+STRINGS.CHARACTERS.GENERIC.DESCRIBE.WGC0310_STAFF_YELLOW = "Gae·Buidhe! 必灭的黄蔷薇！"
+
+AddCharacterRecipe("wgc0310_staff_yellow", {
+   Ingredient("wgc0310_gear", 2),
+   Ingredient("wgc0310_staff", 1),
+   Ingredient("yellowgem", 1),
    Ingredient("goldnugget", 1)
 }, TECH.SCIENCE_TWO, {
    builder_tag = "wgc0310",
